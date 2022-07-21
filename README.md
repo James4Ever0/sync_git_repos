@@ -26,12 +26,16 @@ sync_git_repos_basepath=/root/Desktop/works/sync_git_repos
 # python3 $sync_git_repos_basepath/main.py &
 # gnome-terminal tmuxp $sync_git_repos_basepath/double_sync.yml
 # python3 $sync_git_repos_basepath/main_nongit_sync.py &
+
+
 python3 $sync_git_repos_basepath/double_sync.py
+python3 $sync_git_repos_basepath/check_attached.py
+
 
 /usr/lib/code-oss/code-oss --no-sandbox --unity-launch $@
 
 
-python3 $sync_git_repos_basepath/check_attached.py
+
 
 echo "________________VSCODE LAUNCHED________________"
 
