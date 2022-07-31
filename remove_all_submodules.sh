@@ -1,0 +1,1 @@
+find . | grep -E "\\.git\$" | grep -v "\./\.git" | xargs  -iabc rm -rf abc

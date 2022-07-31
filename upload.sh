@@ -1,0 +1,1 @@
+env GIT_SSH_COMMAND='ssh -i /root/Desktop/works/sync_git_repos/deploy_key/id_ed25519' git push -f --set-upstream origin master

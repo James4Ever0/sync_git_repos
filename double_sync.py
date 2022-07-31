@@ -69,13 +69,14 @@ lock_name = cwd.replace("/", "_") + ".lock"
 lock_path = os.path.join("{}/locks".format(scriptBase), lock_name)
 
 def checkAttached():
-    for session in server.list_sessions():
-        if session["session_name"] == sessionName:
-            attached = session["session_attached"]
-            print("ATTACHED?",attached)
-            if attached == "0":
-                os.system("gnome-terminal -- tmux attach -t {}".format(sessionName))
-
+    try:
+        for session in server.list_sessions():
+            if session["session_name"] == sessionName:
+                attached = session["session_attached"]
+                print("ATTACHED?",attached)
+                if attached == "0":
+                    os.system("gnome-terminal -- tmux attach -t {}".format(sessionName))
+    except:pass
 if (sessionName in getRunningTmuxSessionNames()) and (os.path.exists(lock_path)):
     print("CURRENTLY HAS OTHER SYNC PROCESS WORKING HERE")
     print("WILL NOT LAUNCH NEW SYNC PROCESS")

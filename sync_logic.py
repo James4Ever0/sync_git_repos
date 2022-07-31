@@ -173,8 +173,9 @@ def processReport(report, init=False, init_url="", changeLog=""):
         try:
             repo = git.Repo(elem)
             working_dir = repo.working_dir
+            relativeWorkingDir = os.path.relpath(working_dir)
             if working_dir != absPath:
-                os.system("git rm -r {}".format(working_dir)) # changed.
+                os.system("git rm -r {}".format(relativeWorkingDir)) # changed.
                 # print(elem)
                 try:
                     remoteUrls = [x for x in repo.remote().urls]
@@ -270,8 +271,9 @@ def processReport(report, init=False, init_url="", changeLog=""):
         commit_messagefile = "/dev/shm/commitMsg{}".format(absPath.replace("/","_"))
         with open(commit_messagefile, "w+") as f:
             f.write(commit_message)
-        commands = [
-            "git fetch -f origin {}".format(commit_branch),
+        commands = [ # git config pull.rebase true
+            "git pull -f origin {}".format(commit_branch),
+            "rm -rf .git/index.lock", # eliminate commit problems, rm not to prefix with git!
             "git add .",  # abandon addGlob
             "git commit -F {}".format(commit_messagefile),
             "git branch -M '{}'".format(commit_branch),
@@ -346,9 +348,12 @@ def scanDirs(baseDir, dirName, report):
     dirName = os.path.basename(os.path.relpath(dirPath))
     # if dirName == ".git" and not (os.path.islink(dirPath)): # now we choose the better way.
     #     report["delete"].append(dirPath)
-    mRepo = git.Repo(dirPath)
-    mWork = mRepo.working_dir
-    mWork = os.path.abspath(mWork)
+    try:
+        mRepo = git.Repo(dirPath)
+        mWork = mRepo.working_dir
+        mWork = os.path.abspath(mWork)
+    except:
+        mWork = absPath
     if dirName == ".git" and not (os.path.islink(dirPath)):
         try:
             repo = git.Repo(dirPath)
