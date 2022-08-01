@@ -33,7 +33,8 @@ import subprocess
 
 
 def getActiveVscodeWorkingDirs():
-    scriptPath = os.path.join(scriptBase, "getActiveVscodeWorkingDirs.sh")
+    scriptPath = os.path.join(scriptBase, "getActiveVscodeWorkingDirsMacOS.sh")
+    # scriptPath = os.path.join(scriptBase, "getActiveVscodeWorkingDirs.sh")
     cmdList = ["bash", scriptPath]
     output = subprocess.check_output(cmdList)
     output = output.decode().split("\n")
@@ -74,8 +75,10 @@ def checkAttached():
             if session["session_name"] == sessionName:
                 attached = session["session_attached"]
                 print("ATTACHED?",attached)
+                # no need to attach this shit though.
                 if attached == "0":
-                    os.system("gnome-terminal -- tmux attach -t {}".format(sessionName))
+                    print("SYNC SESSION {} NOT ATTACHED".format(sessionName))
+                    # os.system("tmux attach -t -d {}".format(sessionName))
     except:pass
 if (sessionName in getRunningTmuxSessionNames()) and (os.path.exists(lock_path)):
     print("CURRENTLY HAS OTHER SYNC PROCESS WORKING HERE")
@@ -101,7 +104,7 @@ if cwd in monitoringPaths:
         f.write(
             tmuxpTemplate.render(sessionName=sessionName, scriptBase=scriptBase)
         )
-    os.system("gnome-terminal -- tmuxp load -y {}".format(tmuxpScript))
+    os.system("tmuxp load -y -d {}".format(tmuxpScript))
     # checkAttached()
 else:
     print("Not in monitoring paths")

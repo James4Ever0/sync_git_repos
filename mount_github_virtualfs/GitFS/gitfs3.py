@@ -96,16 +96,16 @@ class GitRepo(object):
 
     def stage(self, _file):
         _file="." # override.
-        logging.debug('staging file %s' %_file)
-        os.system('git add %s' %_file)
+        logging.debug('staging file %s' % _file)
+        os.system('git add %s' % _file)
 
     def commit(self, msg):
-        logging.debug('commiting file %s' %file)
-        os.system('git commit -am \"%s\"' %msg)
+        logging.debug('commiting file %s' % file)
+        os.system('git commit -am \"%s\"' % msg)
 
     def push(self):
         logging.debug('pushing')
-        os.system('git push origin %s' %self.branch)
+        os.system('git push origin %s' % self.branch)
         self.status.clear()
 
 class GitFS(LoggingMixIn, Operations):

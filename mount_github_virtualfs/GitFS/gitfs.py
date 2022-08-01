@@ -249,4 +249,5 @@ if __name__ == "__main__":
     if len(argv) != 5:
         print 'usage: %s <origin> <branch> <local_repo> <mount_point>' % argv[0]
         exit(1)
+    print 'running'
     fuse = FUSE(GitFS(argv[1], argv[2], argv[3]), argv[4], foreground=True)
