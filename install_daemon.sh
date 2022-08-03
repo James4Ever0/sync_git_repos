@@ -1,0 +1,1 @@
+easyd -w /Users/jamesbrown/Desktop/works/sync_git_repos -l vscode_sync_git_repos -- /usr/bin/python3 /Users/jamesbrown/Desktop/works/sync_git_repos/double_sync_macos_daemon.py

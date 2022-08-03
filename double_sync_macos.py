@@ -8,7 +8,10 @@ cwd = os.path.abspath(cwd)
 scriptBase = os.path.abspath(__file__)
 scriptBase = os.path.dirname(scriptBase)
 
-os.system("rm -rf {}/double_sync.yml".format(scriptBase))
+lockBase = os.path.join(scriptBase, 'locks')
+if not os.path.exists(lockBase): os.mkdir(lockBase)
+
+os.system("rm -rf {}/double_sync_macos.yml".format(scriptBase))
 # print(cwd)
 lock_name = cwd.replace("/", "_") + ".lock"
 lock_path = os.path.join("{}/locks".format(scriptBase), lock_name)
@@ -24,10 +27,10 @@ monitoringPaths = list(monitoringDict.keys())
 
 import jinja2
 
-tmuxpTemplate = os.path.join(scriptBase, "double_sync.yml.j2")
+tmuxpTemplate = os.path.join(scriptBase, "double_sync_macos.yml.j2")
 with open(tmuxpTemplate, "r") as f:
     tmuxpTemplate = jinja2.Template(f.read())
-tmuxpScript = os.path.join(scriptBase, "double_sync.yml")
+tmuxpScript = os.path.join(scriptBase, "double_sync_macos.yml")
 
 import subprocess
 
@@ -35,7 +38,7 @@ import subprocess
 def getActiveVscodeWorkingDirs():
     scriptPath = os.path.join(scriptBase, "getActiveVscodeWorkingDirsMacOS.sh")
     # scriptPath = os.path.join(scriptBase, "getActiveVscodeWorkingDirs.sh")
-    cmdList = ["bash", scriptPath]
+    cmdList = ["bash", scriptPath, scriptBase]
     output = subprocess.check_output(cmdList)
     output = output.decode().split("\n")
     output = [x.replace("\n", "") for x in output if len(x) > 2]
@@ -99,12 +102,12 @@ if cwd in monitoringPaths:
         else:
             break
     # if os.path.exists()
-    os.system("python3 {}/create_lock.py".format(scriptBase))
+    os.system("python3 {}/create_lock_macos.py".format(scriptBase))
     with open(tmuxpScript, "w+") as f:
         f.write(
             tmuxpTemplate.render(sessionName=sessionName, scriptBase=scriptBase)
         )
-    os.system("tmuxp load -y -d {}".format(tmuxpScript))
+    os.system("tmuxp load -y -d {}".format(tmuxpScript)) # must be running otherwise no shit will launch.
     # checkAttached()
 else:
     print("Not in monitoring paths")

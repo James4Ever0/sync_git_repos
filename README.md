@@ -37,3 +37,9 @@ echo "________________VSCODE LAUNCHED________________"
 # python3 $sync_git_repos_basepath/delete_lock.py
 
 ```
+
+seems like `double_sync.py` is to check and launch the session. the `check_attached.py` is to check if the session is attached to some terminal. maybe something weird will happen without active monitoring, but we do not care.
+
+do you really need a daemon for this?
+
+on macos, we only need to run `double_sync_macos.py`.

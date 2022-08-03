@@ -1,11 +1,6 @@
-# import schedule
+import schedule
 import time
 import os
-from traceback import print_exc
-
-print("--------------------------------")
-print("-----WAIT LOCK TO DISAPPEAR-----")
-print("--------------------------------")
 
 cwd = os.curdir
 cwd = os.path.abspath(cwd)
@@ -16,6 +11,16 @@ scriptBase = os.path.dirname(scriptBase)
 # print(cwd)
 lock_name = cwd.replace("/", "_") + ".lock"
 lock_path = os.path.join("{}/locks".format(scriptBase), lock_name)
+
+
+def task():
+    # cannot make it into a daemon thread since that will definitely break consistency of git repo.
+    os.system("python3 {}/sync_logic_macos.py".format(scriptBase)) # this is not init.
+    # also check if vscode is alive for this repo.
+    # just check existance of a file.
+
+
+schedule.every(15).seconds.do(task) # is that too quick? or not?
 
 import yaml
 
@@ -31,8 +36,6 @@ myUUID = None
 init=True
 while True:
     if cwd not in monitoringPaths:
-        print("CWD:",cwd)
-        print("MONITORING PATHS:",monitoringPaths)
         print("NOT IN MONITORING PATH LIST")
         break
     if not os.path.exists(lock_path):
@@ -47,7 +50,8 @@ while True:
                 print("UUID CHANGED. MAIN VSCODE SESSION HAS CHANGED!")
                 break
     if init:
-        time.sleep(10)
         init=False
-    else:
-        time.sleep(1)
+        task()
+        continue
+    schedule.run_pending()
+    time.sleep(3)

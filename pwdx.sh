@@ -1,0 +1,1 @@
+lsof -a -d cwd -p $1 -n -Fn | awk '/^n/ {print substr($0,2)}'

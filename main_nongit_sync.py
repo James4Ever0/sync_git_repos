@@ -12,7 +12,7 @@ scriptBase = os.path.dirname(scriptBase)
 lock_name = cwd.replace("/", "_") + ".lock"
 lock_path = os.path.join("{}/locks".format(scriptBase), lock_name)
 
-autobackupPath = os.path.join(cwd,"autobackup.sh")
+autobackupPath = os.path.join(cwd,"autobackup.sh") # this one is shit. this could ruin everything. on macos only git sync is needed.
 
 
 

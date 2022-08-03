@@ -1,0 +1,22 @@
+session_name: {{sessionName}}
+windows:
+  - window_name: double_sync_window
+    layout: tiled
+    # shell_command_before:
+    #   - bash # to ensure we use the right shell
+    # do not use bash in favor of zsh.
+      {# - conda deactivate # to disable conda enviorment #}
+    panes:
+      - shell_command:
+        - python3 {{scriptBase}}/main_macos.py
+        - tmux kill-session -t {{sessionName}}
+      - shell_command:
+        - python3 {{scriptBase}}/waitLockGone.py
+        - python3 {{scriptBase}}/delete_lock_force.py
+        - tmux kill-pane
+        {# - tmux kill-session -t {{sessionName}} #}
+      - shell_command:
+        - python3 {{scriptBase}}/delete_lock_macos.py
+        - python3 {{scriptBase}}/delete_lock_force.py
+        - tmux kill-pane
+        {# - tmux kill-session -t {{sessionName}} #}
